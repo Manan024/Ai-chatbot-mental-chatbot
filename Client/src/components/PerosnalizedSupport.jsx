@@ -18,10 +18,10 @@ function PersonalizedSupport() {
       {/* Support Options */}
       {isSupportOpen && (
         <div className="absolute top-14 left-0 w-full flex flex-col items-end space-y-2 bg-white shadow-lg p-4 rounded-lg">
-          <button className="flex items-center gap-3 p-3 w-full rounded-lg bg-indigo-500 text-white shadow-md transition-all transform hover:scale-105">
+          {/* <button className="flex items-center gap-3 p-3 w-full rounded-lg bg-indigo-500 text-white shadow-md transition-all transform hover:scale-105">
             <MessageCircle className="text-white" />
             <span>Chat with us</span>
-          </button>
+          </button> */}
 
           <button
             className="flex items-center gap-3 p-3 w-full rounded-lg bg-green-500 text-white shadow-md transition-all transform hover:scale-105"

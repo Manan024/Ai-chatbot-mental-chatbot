@@ -7,6 +7,7 @@ import Profile from '../pages/Profile'
 import useAuthStore from '../store/AuthStore'
 import Blog from '../pages/Blog'
 import BlogDetail from '../components/BlogDetails'
+import Support from '../pages/Support'
 
 function CustomRoutes() {
     const { authUser } = useAuthStore()
@@ -21,6 +22,7 @@ function CustomRoutes() {
             <Route path="/profile" element={authUser ? <Profile /> : <Navigate to={"/login"} />} />
             <Route path="/blogs" element={<Blog />} />
             <Route path="/blogs/:id" element={<BlogDetail />} />
+            <Route path="/support" element={<Support />} />
         </Routes>
     )
 }

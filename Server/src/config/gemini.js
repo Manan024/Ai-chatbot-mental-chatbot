@@ -4,135 +4,66 @@ dotenv.config();
 
 const genAI = new GoogleGenerativeAI(process.env.YOUR_API_KEY);
 
+// Predefined responses for specific phrases
+const predefinedResponses = {
+  "i feel stressed": "I'm sorry you're feeling this way. Try taking a deep breath and practicing mindfulness. Would you like some guided breathing exercises?",
+  "i feel anxious": "Anxiety can be overwhelming. Try grounding yourself by focusing on your breath. You're not alone in this!",
+  "i feel depressed": "I'm here for you. You're not alone. It might help to talk to a friend or a therapist. Would you like some self-care tips?",
+  "i can't sleep": "Sleep troubles can be tough. Try limiting screen time before bed and practicing relaxation techniques. Would you like some sleep hygiene tips?",
+  "i feel lonely": "I'm here to support you. Connecting with loved ones or engaging in a hobby might help. Would you like some ideas?",
+  "i'm having a panic attack": "Try the 5-4-3-2-1 grounding technique: Identify 5 things you see, 4 you touch, 3 you hear, 2 you smell, and 1 you taste. Breathe slowly, you're safe.",
+  "i feel worthless": "You matter more than you know. Be kind to yourself, and remember that your feelings do not define your worth. Would you like to talk about it?",
+  "how to manage stress": "Managing stress starts with self-care. Exercise, deep breathing, and mindfulness can help. Would you like a guided relaxation exercise?",
+  "i feel like giving up": "I'm really sorry you're feeling this way. Please remember that you're not alone. Reach out to someone you trust, or consider talking to a professional. You are valued and loved. 💙",
+  "how to deal with anxiety": "Breathing exercises and grounding techniques can help. Would you like some calming strategies?",
+  "i feel sad": "It's okay to feel sad sometimes. Allow yourself to feel, but also try engaging in activities that bring you comfort. Would you like some mood-boosting suggestions?",
+  "i feel burned out": "Burnout is exhausting. Rest, take breaks, and prioritize self-care. Would you like some relaxation tips?",
+};
+
+// Mental health keywords for filtering queries
 const mentalHealthKeywords = [
-  "hii",
-  "hello",
-  "anxiety",
-  "stress",
-  "depression",
-  "mood",
-  "therapy",
-  "panic",
-  "well-being",
-  "self-care",
-  "loneliness",
-  "burnout",
-  "mental health",
-  "sadness",
-  "grief",
-  "self-esteem",
-  "self-harm",
-  "addiction",
-  "trauma",
-  "phobia",
-  "bipolar",
-  "schizophrenia",
-  "PTSD",
-  "OCD",
-  "eating disorder",
-  "body image",
-  "validation",
-  "suicide",
-  "coping",
-  "emotions",
-  "anger",
-  "fatigue",
-  "resilience",
-  "healing",
-  "meditation",
-  "mindfulness",
-  "support",
-  "counseling",
-  "treatment",
-  "medication",
-  "psychotherapy",
-  "psychologist",
-  "psychiatrist",
-  "therapy session",
-  "sleep disorder",
-  "insomnia",
-  "psychological",
-  "mental illness",
-  "mental disorder",
-  "mood swings",
-  "psychosis",
-  "binge eating",
-  "relationship issues",
-  "grief support",
-  "social anxiety",
-  "mental breakdown",
-  "nervous breakdown",
-  "coping mechanisms",
-  "emotional support",
-  "self-compassion",
-  "wellness",
-  "positivity",
-  "acceptance",
-  "mindset",
-  "stress management",
-  "therapy dog",
-  "mind-body connection",
-  "mental health awareness",
-  "cognitive behavioral therapy",
-  "CBT",
-  "feel",
-  "better",
-  "support group",
-  "depressive episodes",
-  "panic attacks",
-  "chronic illness",
-  "ADHD",
-  "borderline personality disorder",
-  "PTSD recovery",
-  "behavioral health",
-  "anger management",
-  "validation",
-  "conflict resolution",
-  "mental fog",
-  "motivation",
-  "self-worth",
-  "emotional intelligence",
-  "self-reflection",
+  "anxiety", "stress", "depression", "panic", "self-care", "loneliness",
+  "burnout", "mental health", "grief", "self-esteem", "trauma", "coping",
+  "meditation", "mindfulness", "support", "counseling", "psychologist",
+  "therapy", "insomnia", "emotional support", "mental breakdown",
+  "social anxiety","sad", "low","anger management", "positivity", "self-worth",
 ];
 
 function isMentalHealthQuery(input) {
   const lowerCaseInput = input.toLowerCase();
-  return mentalHealthKeywords.some((keyword) =>
-    lowerCaseInput.includes(keyword)
-  );
+  return mentalHealthKeywords.some((keyword) => lowerCaseInput.includes(keyword));
 }
 
 async function Gemini(prompt) {
   try {
-    // Check if the user input is related to mental health topics
-    if (!isMentalHealthQuery(prompt)) {
-      return "Sorry, I can only help with mental health-related issues. How are you feeling today?";
+    const lowerCasePrompt = prompt.toLowerCase();
+
+    // Check for predefined responses
+    for (const key in predefinedResponses) {
+      if (lowerCasePrompt.includes(key)) {
+        return predefinedResponses[key]; // Return predefined response
+      }
     }
 
-    // Update the query to encourage empathy, support, and engagement
-    const query = `Provide a short not too long compassionate and empathetic response for the following mental health-related query. Be concise, supportive, and offer encouragement. Avoid lengthy responses. Here is the input: ${prompt}`;
+    // Check if input is related to mental health
+    if (!isMentalHealthQuery(prompt)) {
+      return "I'm here to support mental health conversations. How are you feeling today?";
+    }
 
-    console.log("Query to Gemini AI:", query); // Log the query for debugging
-
+    // Generate AI response
+    const query = `Provide a short, compassionate, and empathetic response to this mental health-related question: ${prompt}`;
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     const result = await model.generateContent(query);
-
-    // Check if the result is valid
     if (!result || !result.response || !result.response.text) {
-      console.error("Invalid response from Gemini API", result);
-      return "Sorry, there was an error processing your request.";
+      return "I'm sorry, but I couldn't process your request.";
     }
 
     let reply = result.response.text();
-
-    // Limit the response length to a reasonable size (e.g., 300 characters)
-    const maxLength = 500; // You can adjust this value as needed
+    const maxLength = 500;
     if (reply.length > maxLength) {
-      reply = reply.slice(0, maxLength) + "..."; // Trim the response if it's too long
+      reply = reply.slice(0, maxLength) + "...";
     }
-
-    console.log("AI Response:", reply); // Log the response for debugging
 
     return reply;
   } catch (error) {

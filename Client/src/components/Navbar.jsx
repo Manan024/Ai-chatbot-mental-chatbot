@@ -10,7 +10,7 @@ function Navbar() {
             {/* Chat App Button */}
             <Link to="/" className="flex items-center gap-2 text-[#A7703B] hover:text-[#855c2c]">
                 <MessageSquare className="w-6 h-6" />
-                <span className="font-bold">Hope</span>
+                <span className="font-bold text-2xl">Hope</span>
             </Link>
 
             {/* Navigation Links */}

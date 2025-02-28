@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Book, Users, LifeBuoy, Headset } from "lucide-react";
+import { Book, Users, LifeBuoy, Headset, User, HeartHandshake } from "lucide-react";
 import { Link } from "react-router";
 import PerosnalizedSupport from './PerosnalizedSupport';
 
@@ -21,7 +21,7 @@ export default function ChatSidebar() {
     const interval = setInterval(() => {
       setTimer((prev) => {
         if (prev > 1) return prev - 1;
-        
+
         // Move to next phase
         const currentIndex = breathingPhases.findIndex(p => p.name === currentPhase);
         const nextIndex = (currentIndex + 1) % breathingPhases.length;
@@ -46,11 +46,13 @@ export default function ChatSidebar() {
   return (
     <div className="w-1/3 h-screen bg-gradient-to-b from-[#FFD5B5] to-[#FFEAD5] p-6 flex flex-col border-r border-gray-300 shadow-lg">
       {/* Logo/Header */}
-      <div className="text-2xl font-bold text-black mb-6 flex items-center gap-2">
+      <div className="text-xl font-bold text-black mb-6 flex items-center gap-2">
         <span className="bg-white p-2 rounded-lg shadow-md">
-          <LifeBuoy className="text-blue-500" />
+          {/* <LifeBuoy className="text-blue-500" /> */}
+
+          <HeartHandshake className="text-green-500 w-6 h-6" />
         </span>
-        HOPE
+        BetterYou
       </div>
 
       {/* Content Area */}
@@ -61,8 +63,8 @@ export default function ChatSidebar() {
             <div className="relative w-48 h-48 flex items-center justify-center">
               <div className="absolute animate-pulse">
                 <div className={`w-32 h-32 rounded-full bg-indigo-200 transition-all duration-1000 
-                  ${currentPhase === 'inhale' ? 'scale-150' : 
-                     currentPhase === 'exhale' ? 'scale-75' : 'scale-125'}`}
+                  ${currentPhase === 'inhale' ? 'scale-150' :
+                    currentPhase === 'exhale' ? 'scale-75' : 'scale-125'}`}
                 />
               </div>
               <span className="text-5xl font-bold text-indigo-600 z-10">{timer}</span>
@@ -74,7 +76,7 @@ export default function ChatSidebar() {
                 exhale: '8 seconds'
               }[currentPhase]})
             </p>
-            <button 
+            <button
               onClick={stopBreathing}
               className="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
             >
@@ -99,12 +101,12 @@ export default function ChatSidebar() {
 
             <Link to="/support" className="w-full">
               <button className="flex items-center gap-3 p-3 w-full rounded-lg cursor-pointer bg-white shadow-md transition-all transform hover:scale-105 hover:bg-indigo-500 hover:text-white font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400">
-                <LifeBuoy className="text-blue-500" />
-                <span>Support</span>
+                <User className="text-blue-500" />
+                <span>User Feedback</span>
               </button>
-            </Link>  
+            </Link>
 
-            <button 
+            <button
               onClick={startBreathing}
               className="flex items-center gap-3 p-3 w-full rounded-lg cursor-pointer bg-white shadow-md transition-all transform hover:scale-105 hover:bg-indigo-500 hover:text-white font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
             >
